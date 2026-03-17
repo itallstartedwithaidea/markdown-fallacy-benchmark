@@ -1,0 +1,19 @@
+{
+  "name": "markdown-fallacy-benchmark",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Empirical benchmark comparing LLM reasoning across memory substrate conditions",
+  "author": "John Williams <john@itallstartedwithaidea.com>",
+  "license": "MIT",
+  "scripts": {
+    "stage1": "node scripts/stage1_run.mjs",
+    "corpus": "node scripts/generate_corpus.mjs",
+    "stage2:setup": "python scripts/stage2_setup.py --all",
+    "stage2": "node scripts/stage2_run.mjs",
+    "analyze": "python scripts/analyze.py",
+    "export:scoring": "python scripts/export_for_scoring.py"
+  },
+  "dependencies": {
+    "neo4j-driver": "^5.27.0"
+  }
+}

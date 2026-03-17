@@ -1,0 +1,49 @@
+# Markdown Fallacy Benchmark — Cursor Project Rules
+
+## Project Purpose
+This is a research benchmark comparing LLM reasoning accuracy across four memory/context substrate conditions:
+1. Flat markdown (llms-full.txt style)
+2. Vector RAG (ChromaDB)
+3. GraphRAG (Neo4j)
+4. Hybrid (Vector + Graph)
+
+The benchmark tests 50 queries across 3 complexity levels against a 50-document Google Ads corpus.
+
+## Tech Stack
+- Runtime: Node.js 20+ (ESM modules, .mjs files)
+- Vector DB: ChromaDB (Python via child_process, or chromadb npm package)
+- Graph DB: Neo4j (via neo4j-driver npm package) 
+- Stats: Python 3.10+ with scipy, statsmodels, pandas
+- LLM APIs: Anthropic, OpenAI, Google Gemini
+
+## Key Architecture Decisions
+- All benchmark scripts use ESM (import, not require)
+- Scoring is DETERMINISTIC (element matching), NOT LLM-as-judge
+- Each query has a `required_elements` array and a `min_elements` threshold
+- Score = min(matched_elements / min_elements, 1.0)
+- Stage 1 uses in-context conditions (both fit in context window)
+- Stage 2 uses retrieval conditions (corpus exceeds context window)
+
+## File Structure
+```
+corpus/               # 50 markdown documents (the test corpus)
+scripts/
+  stage1_run.mjs      # Stage 1: markdown vs structured (in-context)
+  stage2_setup.py      # Stage 2: index corpus into ChromaDB + Neo4j
+  stage2_run.mjs       # Stage 2: all 4 retrieval conditions
+  analyze.py           # Statistical analysis (ANOVA, Tukey, tables)
+  queries.mjs          # All 50 queries with scoring rubrics
+  contexts.mjs         # Markdown and structured context blobs for Stage 1
+  models.mjs           # API caller for Claude, GPT-4o, Gemini
+  scorer.mjs           # Deterministic scoring engine
+results/              # Output JSON files go here
+scoring/              # Human scoring rubrics and sheets
+docs/                 # The paper and execution plan
+```
+
+## When editing or extending:
+- Never use LLM-as-judge for scoring. Always use element matching.
+- Every query must have explicit required_elements and min_elements.
+- All API calls must have retry logic with exponential backoff.
+- Always save raw responses alongside scores for auditability.
+- Results JSON must include metadata (date, model versions, run number).
