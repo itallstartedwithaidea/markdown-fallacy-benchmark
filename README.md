@@ -2,6 +2,8 @@
 
 **An empirical benchmark comparing LLM reasoning accuracy across memory substrate conditions.**
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19059490.svg)](https://doi.org/10.5281/zenodo.19059490)
+
 Companion code and data for the paper: *"The Markdown Fallacy: An Empirical and Theoretical Case Against Static Files as Memory Substrates for Large Language Model Agent Systems"*
 
 ## What This Tests
